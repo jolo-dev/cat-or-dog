@@ -1,0 +1,49 @@
+service: dkb-devops-challenge
+# app and org for use with dashboard.serverless.com
+app: dkb-devops-challenge-app
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: dev
+  region: eu-central-1
+
+plugins:
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+    zip: true
+    slim: true
+    noDeploy:
+      - boto3
+      - botocore
+      - docutils
+      - jmespath
+      - pip
+      - python-dateutil
+      - s3transfer
+      - setuptools
+      - six
+      - tensorboard
+package:
+  exclude:
+    - weights.h5
+    - node_modules/**
+    - model/**
+    - .vscode/**
+
+functions:
+  predict:
+    handler: model.utils.predict
+    timeout: 120
+    events:
+      - http:
+          path: predict
+          method: post
+resources:
+  Resources:
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: dkb-devops-challenge-${sls:instanceId}

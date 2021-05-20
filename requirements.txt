@@ -1,0 +1,6 @@
+tensorflow==1.14.0
+keras==2.2.5
+requests==2.23.0
+Pillow==7.0.0
+Flask==1.1.1
+Flask-BasicAuth==0.2.0
