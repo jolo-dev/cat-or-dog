@@ -1,5 +1,4 @@
 import io
-import os
 
 import requests
 import keras
@@ -17,9 +16,7 @@ def predict(original_image):
     run the prediction on the image handed in.
     """
     model = _construct_model()
-    model.load_weights(
-        _get_weights("https://challenge.dkb-ai.cloud/DevOps/data/cats_and_dogs.h5")
-    )
+    model.load_weights("weights.h5")
 
     image = _preprocess_image(original_image)
     pred = model.predict(image.reshape((1,) + image.shape))[0, 0]
@@ -30,14 +27,6 @@ def predict(original_image):
         retval = f"{(1 - pred) * 100:.0f}% cat"
 
     return retval
-
-
-def _get_weights(url):
-    local_filename = "weights.h5"
-    r = requests.get(url, local_filename)
-    open(local_filename, "wb").write(r.content)
-    return local_filename
-
 
 def _construct_model():
     """
@@ -62,7 +51,7 @@ def _construct_model():
 
     model.compile(
         loss="binary_crossentropy",
-        optimizer=keras.optimizers.Adam(lr=1e-4),
+        optimizer=tensorflow.keras.optimizers.Adam(lr=1e-4),
         metrics=["acc"],
     )
 

@@ -1,11 +1,8 @@
-FROM python:3.7-buster
+FROM public.ecr.aws/bitnami/python:3.9.7
+FROM public.ecr.aws/lambda/python:3.9
 
-COPY . /home
-
-WORKDIR /home
+COPY . ${LAMBDA_TASK_ROOT}
 
 RUN pip install -r requirements.txt
 
-EXPOSE 5000
-
-ENTRYPOINT ["./entrypoint.sh"]
+CMD [ "handler.what_animal" ] 
